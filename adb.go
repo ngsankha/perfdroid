@@ -10,7 +10,6 @@ import (
 )
 
 var adbPath string
-var appPid uint64
 
 func SetupAdb(packageName string) error {
 	path, err := exec.LookPath("adb")
@@ -18,20 +17,11 @@ func SetupAdb(packageName string) error {
 		return err
 	}
 	adbPath = path
-	pid, err := queryPid(packageName)
-	if err != nil {
-		return err
-	}
-	appPid = pid
 	return nil
 }
 
 func AdbPath() string {
 	return adbPath
-}
-
-func Pid() uint64 {
-	return appPid
 }
 
 func ExecAdb(arg ...string) string {
@@ -51,7 +41,7 @@ func ExecAdb(arg ...string) string {
 	return string(readBytes)
 }
 
-func queryPid(packageName string) (uint64, error) {
+func Pid(packageName string) (uint64, error) {
 	out := ExecAdb("ps")
 	lines := strings.Split(out, "\n")
 	for _, line := range lines {

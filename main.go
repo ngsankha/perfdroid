@@ -17,8 +17,12 @@ func main() {
 	}
 
 	fmt.Println("Package:", *packageName)
-	fmt.Println("PID:", Pid())
-	fmt.Println("Total CPU Time:", TotalCpuTime())
+	for {
+		usage := CpuUsage(*packageName)
+		fmt.Println("User:", usage.user)
+		fmt.Println("System:", usage.system)
+	}
+
 }
 
 func parseArgs() {
