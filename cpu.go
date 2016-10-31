@@ -55,7 +55,7 @@ func appCpuUsage(pid uint64) cpuUsage {
 	return cpuUsage{utime: utime, stime: stime}
 }
 
-func CpuUsage(packageName string) CpuMetric {
+func CpuUsage(packageName string, timeInterval int) CpuMetric {
 	// PID is computed everytime because PID can change if app is killed or screen is locked
 	pid, err := Pid(packageName)
 	if err != nil {
@@ -63,7 +63,7 @@ func CpuUsage(packageName string) CpuMetric {
 	}
 	oldTotalTime := totalCpuTime()
 	oldAppTime := appCpuUsage(pid)
-	time.Sleep(1 * time.Second)
+	time.Sleep(timeInterval * time.Second)
 	newTotalTime := totalCpuTime()
 	newAppTime := appCpuUsage(pid)
 	user := float64(newAppTime.utime-oldAppTime.utime) / float64(newTotalTime-oldTotalTime) * 100
